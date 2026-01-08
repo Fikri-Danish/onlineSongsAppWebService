@@ -79,3 +79,15 @@ app.put('/editsong/:id', async (req, res) => {
         res.status(500).json({ message: 'Server error - could not update song id ' + id });
     }
 });
+
+app.get('/deletesong/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        let connection = await mysql.createConnection(dbConfig);
+        const [rows] = await connection.execute('DELETE FROM defaultdb.songs WHERE id = ?', [id]);
+        res.json(rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error for deletesong' });
+    }
+});
