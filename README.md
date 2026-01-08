@@ -1,6 +1,6 @@
 # Song App Web Service (Express + MySQL)
 
-A simple REST API built with **Express** and **mysql2/promise** to manage cards stored in a MySQL database.
+A simple REST API built with **Express** and **mysql2/promise** to manage songs stored in a MySQL database.
 
 ---
 ## Routes
