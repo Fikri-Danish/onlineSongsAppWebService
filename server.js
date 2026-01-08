@@ -41,7 +41,7 @@ app.post('/addsong', async (req, res) => {
     const { song_name, song_artist, song_genre } = req.body;
     try {
         let connection = await mysql.createConnection(dbConfig);
-        await connection.execute('INSERT INTO songs (song_name, song_artist, song_genre) VALUES (?, ?)', [song_name, song_artist, song_genre]);
+        await connection.execute('INSERT INTO songs (song_name, song_artist, song_genre) VALUES (?, ?, ?)', [song_name, song_artist, song_genre]);
         res.status(201).json({ message: 'Song '+song_name+' added successfully' });
     } catch (err) {
         console.error(err);
