@@ -36,7 +36,7 @@ app.get('/allsongs', async (req, res) => {
     }
 });
 
-// Example Route: Create a new song
+// Route: Create a new song
 app.post('/addsong', async (req, res) => {
     const { song_name, song_artist, song_genre } = req.body;
     try {
@@ -46,5 +46,36 @@ app.post('/addsong', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error - could not add song '+song_name});
+    }
+});
+
+// Edit (update) a song
+app.put('/editsong/:id', async (req, res) => {
+    const { id } = req.params;
+    const { song_name, song_artist, song_genre } = req.body;
+
+    if (song_name === undefined && song_artist === undefined && song_genre === undefined) {
+        return res.status(400).json({ message: 'Nothing to update' });
+    }
+
+    try {
+        let connection = await mysql.createConnection(dbConfig);
+        const [result] = await connection.execute(
+            `UPDATE defaultdb.songs 
+             SET song_name = COALESCE(?, song_name),
+                 song_artist = COALESCE(?, song_artist),
+                 song_genre = COALESCE(?, song_genre)
+             WHERE id = ?`,
+            [song_name ?? null, song_artist ?? null, song_genre ?? null, id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Song not found' });
+        }
+
+        res.json({ message: 'Song id ' + id + ' updated successfully' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error - could not update song id ' + id });
     }
 });
