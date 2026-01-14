@@ -80,7 +80,7 @@ app.put('/editsong/:id', async (req, res) => {
     }
 });
 
-app.get('/deletesong/:id', async (req, res) => {
+app.delete('/deletesong/:id', async (req, res) => {
     const { id } = req.params;
     try {
         let connection = await mysql.createConnection(dbConfig);
